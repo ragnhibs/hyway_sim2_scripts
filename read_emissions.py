@@ -57,11 +57,11 @@ member_id_list =  {'OsloCTM3v1-2':'r2',
 #model_list = [ 'LMDZ-INCA'] #'EMAC-DLR'] #'EC-Earth3-AerChem'] #'OsloCTM3v1-2']
 #['EC-Earth3-AerChem','EMAC-DLR', 'CESM2-v212','NorESM2-LM-C','LMDZ-INCA','OsloCTM3v1-2']#,  'CESM2-v212']
 #model_list = [ 'LMDZ-INCA'] #,'CESM2-v212']
-#model_list = ['GFDL-ESM4-c1']
+model_list = ['GFDL-ESM4-c1']
 #model_list =['EMAC-DLR']
 #model_list = ['EC-Earth3-AerChem']#,'EMAC-DLR'] #,'UKESM1-0-LL']
 
-model_list = [ 'OsloCTM3v1-2',  'CESM2-v212']#'UKESM1-0-LL','GFDL-ESM4-c1']
+#model_list = [ 'OsloCTM3v1-2',  'CESM2-v212']#'UKESM1-0-LL','GFDL-ESM4-c1']
 
 for model_id in model_list:
     for experiment_id in experiment_id_list:

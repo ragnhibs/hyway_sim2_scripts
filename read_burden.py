@@ -60,7 +60,7 @@ member_id_list =  {'OsloCTM3v1-2':'r2',
                    'UKESM1-0-LL':'r2'}
 
 
-model_list = ['UKESM1-0-LL','GFDL-ESM4-c1']
+model_list = ['GFDL-ESM4-c1'] #'CESM2-v212'] #'OsloCTM3v1-2' ] #UKESM1-0-LL','GFDL-ESM4-c1']
 
 for experiment_id in experiment_id_list:
     for model_id in model_list:

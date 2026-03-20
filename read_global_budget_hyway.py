@@ -33,8 +33,9 @@ molecw_list = {'ch3oh':32.032,
                'o3':48.0,
                'mhp':48.042}
     
+#molecw_list = {'ch4':16.042}
 
-model_list = [ 'UKESM1-0-LL']
+model_list = ['GFDL-ESM4-c1'] #'CESM2-v212'] #  'OsloCTM3v1-2']#'UKESM1-0-LL']
 
 """
 model_list = ['EMAC-DLR',

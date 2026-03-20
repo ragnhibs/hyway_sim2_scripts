@@ -11,6 +11,22 @@ import glob
 
 #To do: if the dimension variables are slightly different for different files, the script will not work. This can be authomatically fixed in the script.
 
+
+
+def add_2000yr(index):
+    idx = index.astype(str)
+    
+    # 1) Split year and the rest
+    years = idx.str.slice(0, 4).astype(int) + 2000     # add 2000 years
+    rest  = idx.str.slice(4)                           # "-MM-DD HH:MM:SS"
+    
+    # 2) Reassemble with zero-padded year
+    idx_shifted_str = years.map("{:04d}".format) + rest
+    
+    # 3) Parse with explicit format (now safely in 2000+ range)
+    index = pd.to_datetime(idx_shifted_str, format="%Y-%m-%d %H:%M:%S")
+    return index
+
 def read_global_burden(variable_id,table_id,experiment_id,project_id,member_id,molecw,model_id,path,area_path):
     
     time_range='*'
@@ -80,6 +96,14 @@ def read_global_burden(variable_id,table_id,experiment_id,project_id,member_id,m
 
         
     df = monthly_burden.to_dataframe(name=model_id +'_' +member_id)
+
+    
+    if model_id == 'GFDL-ESM4-c1':
+        df.index = add_2000yr(df.index)
+
+    
+    
+    
     df.to_csv('results_csv/monthly_burden_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id+'_'+project_id + '_' +experiment_id + '.csv')
 
 def  read_global_burden_aerosols(variable_id,table_id,experiment_id,project_id,member_id,model_id,path,area_path):
@@ -143,6 +167,14 @@ def  read_global_burden_aerosols(variable_id,table_id,experiment_id,project_id,m
 
         
     df = monthly_burden.to_dataframe(name=model_id +'_' +member_id)
+
+
+    if model_id == 'GFDL-ESM4-c1':
+        df.index = add_2000yr(df.index)
+
+    print(df)
+
+    
     df.to_csv('results_csv/monthly_burden_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id+'_'+project_id + '_' +experiment_id + '.csv')
 
 def read_global_surfconc(variable_id,table_id,experiment_id,project_id,member_id,molecw,model_id,path,area_path):
@@ -188,6 +220,13 @@ def read_global_surfconc(variable_id,table_id,experiment_id,project_id,member_id
     globalmean = weighted_field.mean(dim=['lat', 'lon'])
 
     df = globalmean.to_dataframe(name=model_id +'_' +member_id)
+
+    if model_id == 'GFDL-ESM4-c1':
+        df.index = add_2000yr(df.index)
+
+    print(df)
+
+
     df.to_csv('results_csv/monthly_surfconc_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id+'_'+project_id + '_' +experiment_id + '.csv')
    
 
@@ -203,16 +242,8 @@ def read_global_atmprod(variable_id,table_id,experiment_id,project_id,member_id,
         print(full_path)
         return
     
-    #if model_id == 'EC-Earth3-AerChem':
-    #    model_data = xr.open_mfdataset(full_path,decode_times=False)
-    #else:
-    model_data = xr.open_mfdataset(full_path)
+    model_data = xr.open_mfdataset(full_path, chunks={'time': 1})
         
-
-    #if model_id == 'LMDZ-INCA':
-    #    model_data = model_data.rename({'presnivs':'lev'})
-    #elif model_id == 'EMAC-DLR':
-    #    model_data = model_data.rename({'eta':'lev'})
     if model_id == 'NorESM2-LM-C':         
         file_volume = 'volume'+'_'+table_id+'_'+model_id+'_'+project_id + '_' +experiment_id+'_'+member_id+'_'+time_range+'12.nc'
     else:
@@ -225,33 +256,30 @@ def read_global_atmprod(variable_id,table_id,experiment_id,project_id,member_id,
         print(volume_full_path)
         return
     print(volume_full_path)
-    #if model_id == 'EC-Earth3-AerChem':
-    #    volume = xr.open_mfdataset(volume_full_path,decode_times=False)
-    #else:
-    volume = xr.open_mfdataset(volume_full_path)
     
 
-    #if model_id == 'LMDZ-INCA':
-    #    volume = volume.rename({'presnivs':'lev'})
-    #if model_id == 'EMAC-DLR':
-    #    volume = volume.rename({'eta':'lev'})
+    volume = xr.open_mfdataset(volume_full_path, chunks={'time': 1})
+    
 
     if model_id == 'CESM2-v212':
         volume['lat'] = model_data['lat']
         volume['lev'] = model_data['lev']
-
-    
     
 
-        
     atmprod = model_data['prod'+variable_id]*volume['volume']
     atmprod = atmprod.sum(dim=['lat','lev','lon'])*365.0*24.0*60.0*60.0  #kg sec-1 -> kg per year
     atmprod = atmprod*1e-9 #kg -> Tg
     print(atmprod)
 
     df = atmprod.to_dataframe(name=model_id +'_' +member_id)
+
+    if model_id == 'GFDL-ESM4-c1':
+        df.index = add_2000yr(df.index)
+
+    print(df)
+
     df.to_csv('results_csv/monthly_atmprod_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id+'_'+project_id + '_' +experiment_id + '.csv')
-    
+
     
 def read_global_photoprod(variable_id,table_id,experiment_id,project_id,member_id,molecw,model_id,path,area_path):
     
@@ -269,7 +297,7 @@ def read_global_photoprod(variable_id,table_id,experiment_id,project_id,member_i
     #if model_id == 'EC-Earth3-AerChem':
     #    model_data = xr.open_mfdataset(full_path,decode_times=False)
     #else:
-    model_data = xr.open_mfdataset(full_path)
+    model_data = xr.open_mfdataset(full_path, chunks={'time': 1})
         
 
     #if model_id == 'LMDZ-INCA':
@@ -291,7 +319,7 @@ def read_global_photoprod(variable_id,table_id,experiment_id,project_id,member_i
     #if model_id == 'EC-Earth3-AerChem':
     #    volume = xr.open_mfdataset(volume_full_path,decode_times=False)
     #else:
-    volume = xr.open_mfdataset(volume_full_path)
+    volume = xr.open_mfdataset(volume_full_path, chunks={'time': 1})
     
     #if model_id == 'LMDZ-INCA':
     #    volume = volume.rename({'presnivs':'lev'})
@@ -309,6 +337,14 @@ def read_global_photoprod(variable_id,table_id,experiment_id,project_id,member_i
     print(atmprod)
 
     df = atmprod.to_dataframe(name=model_id +'_' +member_id)
+
+
+    if model_id == 'GFDL-ESM4-c1':
+        df.index = add_2000yr(df.index)
+
+    print(df)
+
+    
     df.to_csv('results_csv/monthly_photoprod_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id+'_'+project_id + '_' +experiment_id + '.csv')
 
     
@@ -327,7 +363,7 @@ def read_global_atmloss(variable_id,table_id,experiment_id,project_id,member_id,
     #if model_id == 'EC-Earth3-AerChem':
     #    model_data = xr.open_mfdataset(full_path,decode_times=False)
     #else:
-    model_data = xr.open_mfdataset(full_path)
+    model_data = xr.open_mfdataset(full_path, chunks={'time': 1})
         
     
     #if model_id == 'LMDZ-INCA':
@@ -349,7 +385,7 @@ def read_global_atmloss(variable_id,table_id,experiment_id,project_id,member_id,
     #if model_id == 'EC-Earth3-AerChem':
     #    volume = xr.open_mfdataset(volume_full_path,decode_times=False)
     #else:
-    volume = xr.open_mfdataset(volume_full_path)
+    volume = xr.open_mfdataset(volume_full_path, chunks={'time': 1})
 
     
 
@@ -368,11 +404,19 @@ def read_global_atmloss(variable_id,table_id,experiment_id,project_id,member_id,
     
     atmloss = model_data['loss'+variable_id]*volume['volume']
     
-    atmloss = atmloss.sum(dim=['lat','lev','lon'])*365.0*24.0*60.0*60.0  #kg sec-1 -> kg per year
+    if model_id ==  'GFDL-ESM4-c1' and variable_id == 'ch4':
+        atmloss = atmloss.sum(dim=['lat','lev','lon'])*365.0*24.0*60.0*60.0*16.04*1e-3 # mol per sec -> mol per year
+    else:
+        atmloss = atmloss.sum(dim=['lat','lev','lon'])*365.0*24.0*60.0*60.0  #kg sec-1 -> kg per year
+    
     atmloss = atmloss*1e-9 #kg -> Tg
 
     df = atmloss.to_dataframe(name=model_id +'_' +member_id)
 
+    if model_id == 'GFDL-ESM4-c1':
+        df.index = add_2000yr(df.index)
+
+    print(df)
     
     df.to_csv('results_csv/monthly_atmloss_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id+'_'+project_id + '_' +experiment_id + '.csv')
 
@@ -392,7 +436,7 @@ def read_global_photoloss(variable_id,table_id,experiment_id,project_id,member_i
     #if model_id == 'EC-Earth3-AerChem':
     #    model_data = xr.open_mfdataset(full_path,decode_times=False)
     #else:
-    model_data = xr.open_mfdataset(full_path)
+    model_data = xr.open_mfdataset(full_path, chunks={'time': 1})
         
     
     #if model_id == 'LMDZ-INCA':
@@ -414,7 +458,7 @@ def read_global_photoloss(variable_id,table_id,experiment_id,project_id,member_i
     #if model_id == 'EC-Earth3-AerChem':
     #    volume = xr.open_mfdataset(volume_full_path,decode_times=False)
     #else:
-    volume = xr.open_mfdataset(volume_full_path)
+    volume = xr.open_mfdataset(volume_full_path, chunks={'time': 1})
 
     #if model_id == 'LMDZ-INCA':
     #    volume = volume.rename({'presnivs':'lev'})
@@ -430,7 +474,10 @@ def read_global_photoloss(variable_id,table_id,experiment_id,project_id,member_i
     atmloss = atmloss*1e-9 #kg -> Tg
 
     df = atmloss.to_dataframe(name=model_id +'_' +member_id)
-    
+    if model_id == 'GFDL-ESM4-c1':
+        df.index = add_2000yr(df.index)
+
+    print(df)
     df.to_csv('results_csv/monthly_photoloss_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id+'_'+project_id + '_' +experiment_id + '.csv')
     
 
@@ -472,6 +519,10 @@ def read_global_soilsink(variable_id,table_id,experiment_id,project_id,member_id
     data = data.sum(dim=['lat','lon'])*1e-9 #kg -> Tg
 
     df = data.to_dataframe(name=model_id +'_' +member_id)
+    if model_id == 'GFDL-ESM4-c1':
+        df.index = add_2000yr(df.index)
+
+    print(df)
     df.to_csv('results_csv/monthly_soilsink_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id+'_'+project_id + '_' +experiment_id + '.csv')
    
 def read_global_wetdep(variable_id,table_id,experiment_id,project_id,member_id,molecw,model_id,path,area_path):
@@ -513,6 +564,10 @@ def read_global_wetdep(variable_id,table_id,experiment_id,project_id,member_id,m
     data = data.sum(dim=['lat','lon'])*1e-9 #kg -> Tg
 
     df = data.to_dataframe(name=model_id +'_' +member_id)
+    if model_id == 'GFDL-ESM4-c1':
+        df.index = add_2000yr(df.index)
+
+    print(df)
     df.to_csv('results_csv/monthly_wetdep_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id+'_'+project_id + '_' +experiment_id + '.csv')
 
 def read_global_emis(variable_id,table_id,experiment_id,project_id,member_id,molecw,model_id,path,area_path):
@@ -554,6 +609,10 @@ def read_global_emis(variable_id,table_id,experiment_id,project_id,member_id,mol
     data = data.sum(dim=['lat','lon'])*1e-9 #kg -> Tg
 
     df = data.to_dataframe(name=model_id +'_' +member_id)
+    print(df)
+    if model_id == 'GFDL-ESM4-c1':
+        df.index = add_2000yr(df.index)
+
     print(df)
     df.to_csv('results_csv/monthly_emis_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id+'_'+project_id + '_' +experiment_id + '.csv')
 

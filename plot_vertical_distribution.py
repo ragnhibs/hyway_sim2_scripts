@@ -96,8 +96,8 @@ def read_vmr_from_netcdf():
 ##########################################################
 #Choose perturbation experiment to plot relative to cntr.
 #experiment_id_pert = 'ch3ohpert'
-#experiment_id_pert = 'h2pert'
-experiment_id_pert = 'ch4pert'   
+experiment_id_pert = 'h2pert'
+#experiment_id_pert = 'ch4pert'   
 
 
 time_range = '*'
@@ -116,27 +116,32 @@ project_id = 'hyway'
 #model_id = 'EC-Earth3-AerChem'
 #member_id = 'r1'
 
-#model_id = 'EMAC-DLR'
-#member_id = 'r1'
+model_id = 'EMAC-DLR'
+member_id = 'r3'
 
 
 #model_id = 'GFDL-ESM4-c1'
 #member_id = 'r1'
 
 
-model_id = 'UKESM1-0-LL'
-member_id ='r2'
+#model_id = 'UKESM1-0-LL'
+#member_id ='r2'
 
+#model_id = 'NorESM2-LM-C'
+#member_id = 'r1'
 
-year_period_list = {'EMAC-DLR':[2029,2031],
-                    #'NorESM2-LM-C':[0,0],
-                    'LMDZ-INCA':[2005,2010],
+#model_id = 'LMDZ-INCA'
+#member_id = 'r1'
+
+year_period_list = {'EMAC-DLR':[2039,2040],
+                    'NorESM2-LM-C':[2027,2028],
+                    'LMDZ-INCA':[2018,2019],
                     'OsloCTM3v1-2':[2038,2039],
                     ##'OsloCTM3v1-2':[2022,2023],
                     'CESM2-v212':[2055,2075],
                     ##'CESM2-v212':[2045,2055],
                     #'UKESM1-0-LL':[2000,2004],
-                    'UKESM1-0-LL':[1998,1999],
+                    'UKESM1-0-LL':[2005,2010],
                     'GFDL-ESM4-c1':[50,60],
                     'EC-Earth3-AerChem':[2024,2030]}
 

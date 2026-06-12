@@ -10,12 +10,14 @@ axs=axs.flatten()
 #experiment_id = 'h2pert'
 
 variable_id = 'ch4'
-experiment_id = 'ch4pert'
+#experiment_id = 'ch4pert'
+experiment_id = 'h2pert'
 
 model_list = ['OsloCTM3v1-2',
               'EC-Earth3-AerChem',
-              #'EMAC-DLR',
-              #'LMDZ-INCA',
+              'NorESM2-LM-C' ,
+              'EMAC-DLR',
+              'LMDZ-INCA',
               'CESM2-v212',
               'UKESM1-0-LL',
               'GFDL-ESM4-c1']
@@ -34,8 +36,9 @@ table_id = 'monthly'
 project_id = 'hyway'
 
 member_id_list =  {'OsloCTM3v1-2':'r2',
+                   'NorESM2-LM-C':'r1',
                    'EC-Earth3-AerChem':'r1',
-                   'EMAC-DLR':'r1',
+                   'EMAC-DLR':'r3',
                    'LMDZ-INCA':'r1',
                    'CESM2-v212':'r1',
                    'GFDL-ESM4-c1':'r1',
@@ -55,6 +58,7 @@ title_dict = {'surfconc':'Surfconc [ppb]',
 
 
 for model_id in model_list:
+    print('Model: ',model_id)
     member_id = member_id_list[model_id]
     budget_annual_cntr = pd.read_csv('annual_budget_csv/'+variable_id+'_'+model_id+'_'+member_id+'_'+project_id + '_' +'cntr' + '.csv',index_col=0)
     budget_annual_pert = pd.read_csv('annual_budget_csv/'+variable_id+'_'+model_id+'_'+member_id+'_'+project_id + '_' +experiment_id + '.csv',index_col=0)

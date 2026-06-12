@@ -34,8 +34,9 @@ variable_id = 'h2'
 
 model_list = ['OsloCTM3v1-2',
               'EC-Earth3-AerChem',
-              #'EMAC-DLR',
-              #'LMDZ-INCA',
+              'NorESM2-LM-C',
+              'EMAC-DLR',
+              'LMDZ-INCA',
               'CESM2-v212',
               'UKESM1-0-LL',
               'GFDL-ESM4-c1']
@@ -54,8 +55,9 @@ table_id = 'monthly'
 project_id = 'hyway'
 
 member_id_list =  {'OsloCTM3v1-2':'r2',
+                   'NorESM2-LM-C':'r1',
                    'EC-Earth3-AerChem':'r1',
-                   'EMAC-DLR':'r1',
+                   'EMAC-DLR':'r3',
                    'LMDZ-INCA':'r1',
                    'CESM2-v212':'r1',
                    'GFDL-ESM4-c1':'r1',
@@ -208,6 +210,7 @@ for model_id in model_list:
 
 
         else:
+            
             emis = pd.read_csv('results_csv/monthly_emis_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id+ '_'+project_id + '_' +experiment_id + '.csv',index_col=0)
             emis.index = pd.to_datetime(emis.index)
             emis.index = emis.index.map(lambda x: x.replace(day=15))

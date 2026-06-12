@@ -34,6 +34,7 @@ model_list = ['OsloCTM3v1-2',
               'EC-Earth3-AerChem',
               'EMAC-DLR',
               'LMDZ-INCA',
+              'NorESM2-LM-C',
               'CESM2-v212',
               'UKESM1-0-LL',
               'GFDL-ESM4-c1']
@@ -52,8 +53,9 @@ table_id = 'monthly'
 project_id = 'hyway'
 
 member_id_list =  {'OsloCTM3v1-2':'r2',
+                   'NorESM2-LM-C':'r1',
                    'EC-Earth3-AerChem':'r1',
-                   'EMAC-DLR':'r1',
+                   'EMAC-DLR':'r3',
                    'LMDZ-INCA':'r1',
                    'CESM2-v212':'r1',
                    'GFDL-ESM4-c1':'r1',
@@ -63,7 +65,7 @@ member_id_list =  {'OsloCTM3v1-2':'r2',
 
 
 #List of experiments to plot:
-experiment_list = ['cntr'] #,'h2pert','ch4pert']
+experiment_list = ['cntr','h2pert','ch4pert']
 #experiment_list = ['transient2010s']
 
 

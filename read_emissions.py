@@ -45,20 +45,21 @@ project_id = 'hyway'
 experiment_id_list = ['cntr','h2pert','ch4pert']
 
 member_id_list =  {'OsloCTM3v1-2':'r2',
+                   'NorESM2-LM-C':'r1',
                    'EC-Earth3-AerChem':'r1',
-                   'EMAC-DLR':'r1',
+                   'EMAC-DLR':'r3',
                    'LMDZ-INCA':'r1',
                    'CESM2-v212':'r1',
                    'GFDL-ESM4-c1':'r1',
                    'UKESM1-0-LL':'r2'}
 
 #member_id = 'r1'
-#model_list = [ 'UKESM1-0-LL','EC-Earth3-AerChem','EMAC-DLR']
+#model_list = [ 'GFDL-ESM4-c1'] #'UKESM1-0-LL'] #,'EC-Earth3-AerChem','EMAC-DLR']
 #model_list = [ 'LMDZ-INCA'] #'EMAC-DLR'] #'EC-Earth3-AerChem'] #'OsloCTM3v1-2']
 #['EC-Earth3-AerChem','EMAC-DLR', 'CESM2-v212','NorESM2-LM-C','LMDZ-INCA','OsloCTM3v1-2']#,  'CESM2-v212']
 #model_list = [ 'LMDZ-INCA'] #,'CESM2-v212']
-model_list = ['GFDL-ESM4-c1']
-#model_list =['EMAC-DLR']
+#model_list = ['NorESM2-LM-C'] #'GFDL-ESM4-c1']
+model_list =['EMAC-DLR'] #,'NorESM2-LM-C']
 #model_list = ['EC-Earth3-AerChem']#,'EMAC-DLR'] #,'UKESM1-0-LL']
 
 #model_list = [ 'OsloCTM3v1-2',  'CESM2-v212']#'UKESM1-0-LL','GFDL-ESM4-c1']
@@ -74,7 +75,7 @@ for model_id in model_list:
         elif model_id == 'EC-Earth3-AerChem':
             area_path = '/projects/NS11106K/HYway/modelling_repository/'+model_id+'/fixed/'
         elif model_id =='EMAC-DLR':
-            area_path = '/projects/NS11106K/HYway/modelling_repository/'+model_id+'/'
+            area_path = '/projects/NS11106K/HYway/modelling_repository/'+model_id+'/fixed/'
         
         else:
             area_path = '/projects/NS11106K/HYway/modelling_repository/'+model_id+'/transient2010s/'

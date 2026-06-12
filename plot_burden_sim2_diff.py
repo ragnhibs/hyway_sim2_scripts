@@ -56,9 +56,9 @@ molecw_list = {'h2':2.016,
 
 
 #model_list = ['OsloCTM3v1-2']
-#model_list = ['UKESM1-0-LL'] #,
-model_list = ['GFDL-ESM4-c1'] #'EC-Earth3-AerChem'] #'CESM2-v212']
-
+#model_list = ['LMDZ-INCA' ] #'NorESM2-LM-C'] #'UKESM1-0-LL'] #,
+#model_list = ['GFDL-ESM4-c1'] #'EC-Earth3-AerChem'] #'CESM2-v212']
+model_list =  ['NorESM2-LM-C'] #'UKESM1-0-LL' ] #'EMAC-DLR']
 
 color_list = {'OsloCTM3v1-2'   : '#D55E00',  # vermillion
               'CESM2-v212'     : '#0072B2',  # blue
@@ -75,10 +75,11 @@ project_id = 'hyway'
 
 member_id_list =  {'OsloCTM3v1-2':'r2',
                    'EC-Earth3-AerChem':'r1',
-                   'EMAC-DLR':'r1',
+                   'EMAC-DLR':'r3',
                    'LMDZ-INCA':'r1',
                    'CESM2-v212':'r1',
                    'GFDL-ESM4-c1':'r1',
+                   'NorESM2-LM-C':'r1',
                    'UKESM1-0-LL':'r2'}
 
 
@@ -161,6 +162,10 @@ for v,variable_id in enumerate(molecw_list):
                 burden.index = burden.index.map(lambda dt: dt.replace(day=15, hour=12, minute=0, second=0))
                 burden_cntr = burden
 
+                #print(burden_pert)
+                #print(burden_cntr)
+                
+                
                 burden = burden_pert - burden_cntr
                 
                 burden_yearmean = calc_annual_mean(burden)

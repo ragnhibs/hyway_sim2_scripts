@@ -18,15 +18,16 @@ linestylelist = {'cntr':'-',
 
 
 member_id_list =  {'OsloCTM3v1-2':'r2',
+                   'NorESM2-LM-C'   :'r1',
                    'EC-Earth3-AerChem':'r1',
-                   'EMAC-DLR':'r1',
+                   'EMAC-DLR':'r3',
                    'LMDZ-INCA':'r1',
                    'CESM2-v212':'r1',
                    'GFDL-ESM4-c1':'r1',
                    'UKESM1-0-LL':'r2'}
 
 
-logplot = False
+logplot = True
 
 
 
@@ -44,7 +45,8 @@ variable_list = ['h2',
                  'mmrso4']
 
 
-model_list = ['OsloCTM3v1-2',
+model_list = ['NorESM2-LM-C',
+              'OsloCTM3v1-2',
               'EC-Earth3-AerChem',
               'EMAC-DLR',
               'LMDZ-INCA',
@@ -73,11 +75,11 @@ color_list = {'OsloCTM3v1-2'   : '#D55E00',  # vermillion
 
 
 year_period_list = {'EMAC-DLR':[2029,2031],
-                    #'NorESM2-LM-C':[0,0],
-                    'LMDZ-INCA':[2005,2010],
+                    'NorESM2-LM-C':[2027,2028],
+                    'LMDZ-INCA':[2019,2019],
                     'OsloCTM3v1-2':[2038,2039],
                     'CESM2-v212':[2055,2075],
-                    'UKESM1-0-LL':[2000,2005],
+                    'UKESM1-0-LL':[2005,2010],
                     'GFDL-ESM4-c1':[40,60],
                     'UKESM1-0-LL':[1998,1999],
                     'EC-Earth3-AerChem':[2024,2030]}

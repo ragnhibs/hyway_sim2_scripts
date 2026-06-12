@@ -52,6 +52,7 @@ emilist =['emich3cho',
 
 model_list = ['OsloCTM3v1-2',
               'EC-Earth3-AerChem',
+              'NorESM2-LM-C',
               'EMAC-DLR',
               'LMDZ-INCA',
               'CESM2-v212',
@@ -77,8 +78,9 @@ project_id = 'hyway'
 
 
 member_id_list =  {'OsloCTM3v1-2':'r2',
+                   'NorESM2-LM-C':'r1',
                    'EC-Earth3-AerChem':'r1',
-                   'EMAC-DLR':'r1',
+                   'EMAC-DLR':'r3',
                    'LMDZ-INCA':'r1',
                    'CESM2-v212':'r1',
                    'GFDL-ESM4-c1':'r1',
@@ -101,11 +103,12 @@ axs=axs.flatten()
 
 
 for v,comp in enumerate(emilist):
+    print('Comp:'+comp)
     emis_all_year = pd.DataFrame([])
     variable_id = comp[3:]
     ax = axs[v]
     for model_id in model_list:
-        print(model_id)
+        print('Model:' +model_id)
         member_id = member_id_list[model_id]
         
         unit = 'Tg yr$^{-1}$'
@@ -119,6 +122,9 @@ for v,comp in enumerate(emilist):
             #if model_id ==  'EC-Earth3-AerChem':
             #    emis.index = index_save
             #else:
+
+
+            """
             if model_id == 'GFDL-ESM4-c1':
                     print('Her')
                     print(emis.index)
@@ -134,7 +140,7 @@ for v,comp in enumerate(emilist):
 
                     # 3) Parse with explicit format (now safely in 2000+ range)
                     emis.index = pd.to_datetime(idx_shifted_str, format="%Y-%m-%d %H:%M:%S")
-
+            """
             
             emis.index = pd.to_datetime(emis.index)
             index_save = emis.index

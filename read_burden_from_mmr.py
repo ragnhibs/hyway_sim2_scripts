@@ -30,13 +30,14 @@ model_list = ['LMDZ-INCA',
               'OsloCTM3v1-2',
               'CESM2-v212']
 
-model_list =['UKESM1-0-LL','GFDL-ESM4-c1']
+model_list =['EMAC-DLR','NorESM2-LM-C'] #'GFDL-ESM4-c1']
 
 
 
 member_id_list =  {'OsloCTM3v1-2':'r2',
                    'EC-Earth3-AerChem':'r1',
-                   'EMAC-DLR':'r1',
+                   'NorESM2-LM-C':'r1',
+                   'EMAC-DLR':'r3',
                    'LMDZ-INCA':'r1',
                    'CESM2-v212':'r1',
                    'GFDL-ESM4-c1':'r1',

@@ -15,8 +15,9 @@ project_id = 'hyway'
 experiment_id_list = ['cntr','h2pert','ch4pert']
 
 member_id_list =  {'OsloCTM3v1-2':'r2',
+                   'NorESM2-LM-C':'r1',
                    'EC-Earth3-AerChem':'r1',
-                   'EMAC-DLR':'r1',
+                   'EMAC-DLR':'r3',
                    'LMDZ-INCA':'r1',
                    'CESM2-v212':'r1',
                    'GFDL-ESM4-c1':'r1',
@@ -35,7 +36,7 @@ molecw_list = {'ch3oh':32.032,
     
 #molecw_list = {'ch4':16.042}
 
-model_list = ['GFDL-ESM4-c1'] #'CESM2-v212'] #  'OsloCTM3v1-2']#'UKESM1-0-LL']
+model_list = [ 'UKESM1-0-LL'] #'EMAC-DLR'] #'LMDZ-INCA'] #'NorESM2-LM-C'] #'UKESM1-0-LL'] #'NorESM2-LM-C'] #'GFDL-ESM4-c1'] #'CESM2-v212'] #  'OsloCTM3v1-2']#'UKESM1-0-LL']
 
 """
 model_list = ['EMAC-DLR',
@@ -59,7 +60,7 @@ for variable_id in molecw_list:
             if model_id =='CESM2-v212':
                 area_path = '/nird/home/ragnhibs/hyway/tmp/'
             elif model_id =='EMAC-DLR':
-                area_path = '/projects/NS11106K/HYway/modelling_repository/'+model_id+'/'
+                area_path = '/projects/NS11106K/HYway/modelling_repository/'+model_id+'/fixed/'
             elif model_id == 'EC-Earth3-AerChem':
                 area_path = '/projects/NS11106K/HYway/modelling_repository/'+model_id+'/fixed/'
             else:

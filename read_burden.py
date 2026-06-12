@@ -52,15 +52,16 @@ project_id = 'hyway'
 experiment_id_list = ['cntr','h2pert','ch4pert']
 
 member_id_list =  {'OsloCTM3v1-2':'r2',
+                   'NorESM2-LM-C':'r1',
                    'EC-Earth3-AerChem':'r1',
-                   'EMAC-DLR':'r1',
+                   'EMAC-DLR':'r3',
                    'LMDZ-INCA':'r1',
                    'CESM2-v212':'r1',
                    'GFDL-ESM4-c1':'r1',
                    'UKESM1-0-LL':'r2'}
 
 
-model_list = ['GFDL-ESM4-c1'] #'CESM2-v212'] #'OsloCTM3v1-2' ] #UKESM1-0-LL','GFDL-ESM4-c1']
+model_list = ['NorESM2-LM-C'] #'EMAC-DLR'] #'LMDZ-INCA'] #'NorESM2-LM-C'] #'UKESM1-0-LL'] #'GFDL-ESM4-c1'] #'CESM2-v212'] #'OsloCTM3v1-2' ] #UKESM1-0-LL','GFDL-ESM4-c1']
 
 for experiment_id in experiment_id_list:
     for model_id in model_list:
@@ -70,7 +71,7 @@ for experiment_id in experiment_id_list:
         if model_id =='EC-Earth3-AerChem':
             area_path = '/projects/NS11106K/HYway/modelling_repository/'+model_id+'/fixed/'
         elif model_id == 'EMAC-DLR':
-            area_path = '/projects/NS11106K/HYway/modelling_repository/'+model_id+'/'
+            area_path = '/projects/NS11106K/HYway/modelling_repository/'+model_id+'/fixed/'
         else:
             area_path = '/projects/NS11106K/HYway/modelling_repository/'+model_id+'/transient2010s/'
 

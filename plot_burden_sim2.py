@@ -56,6 +56,7 @@ molecw_list = {'h2':2.016,
 
 
 model_list = ['OsloCTM3v1-2',
+              'NorESM2-LM-C' ,
               'EC-Earth3-AerChem',
               'EMAC-DLR',
               'LMDZ-INCA',
@@ -82,8 +83,9 @@ project_id = 'hyway'
 #experiment_list = ['h2pert','ch4pert']
 experiment_id = 'cntr' #'transient2010s'
 member_id_list =  {'OsloCTM3v1-2':'r2',
+                   'NorESM2-LM-C'   : 'r1',
                    'EC-Earth3-AerChem':'r1',
-                   'EMAC-DLR':'r1',
+                   'EMAC-DLR':'r3',
                    'LMDZ-INCA':'r1',
                    'CESM2-v212':'r1',
                    'GFDL-ESM4-c1':'r1',
@@ -101,6 +103,7 @@ axs=axs.flatten()
 for v,variable_id in enumerate(molecw_list):
     ax = axs[v]
     for model_id in model_list:
+        
         member_id = member_id_list[model_id]
         #Burden
         unit = 'Tg'
@@ -109,23 +112,24 @@ for v,variable_id in enumerate(molecw_list):
         #for experiment_id in experiment_list:
         filename = 'results_csv/monthly_burden_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id+'_'+project_id + '_' +experiment_id + '.csv'
         if os.path.exists(filename):
+            print(filename)
             burden = pd.read_csv(filename,index_col=0)
-            if model_id == 'GFDL-ESM4-c1':
-                    print('Her')
-                                        
-                    idx = burden.index.astype(str)
+            #if model_id == 'GFDL-ESM4-c1':
+            #        print('Her')
+            #                            
+            #        idx = burden.index.astype(str)
                     
-                    # 1) Split year and the rest
-                    years = idx.str.slice(0, 4).astype(int) + 2000     # add 2000 years
-                    rest  = idx.str.slice(4)                           # "-MM-DD HH:MM:SS"
+            #        # 1) Split year and the rest
+            #        years = idx.str.slice(0, 4).astype(int) + 2000     # add 2000 years
+            #        rest  = idx.str.slice(4)                           # "-MM-DD HH:MM:SS"
                     
-                    # 2) Reassemble with zero-padded year
-                    idx_shifted_str = years.map("{:04d}".format) + rest
+            #        # 2) Reassemble with zero-padded year
+            #        idx_shifted_str = years.map("{:04d}".format) + rest#
 
-                    # 3) Parse with explicit format (now safely in 2000+ range)
-                    burden.index = pd.to_datetime(idx_shifted_str, format="%Y-%m-%d %H:%M:%S")
-            else:
-                burden.index = pd.to_datetime(burden.index)
+            #        # 3) Parse with explicit format (now safely in 2000+ range)
+            #        burden.index = pd.to_datetime(idx_shifted_str, format="%Y-%m-%d %H:%M:%#S")
+            #else:
+            burden.index = pd.to_datetime(burden.index)
 
             burden.index = burden.index.map(lambda dt: dt.replace(day=15, hour=12, minute=0, second=0)).floor("min")
             

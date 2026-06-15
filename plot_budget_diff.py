@@ -6,12 +6,17 @@ import matplotlib.pyplot as plt
 fig, axs = plt.subplots(nrows=3,ncols=3,squeeze=True,figsize=(20,15),sharey=False)
 axs=axs.flatten()
 
-#variable_id = 'h2'
+
+
+#Plot h2 or ch4 delta budget. For h2pert of ch4pert.
+
+
+variable_id = 'h2'
 #experiment_id = 'h2pert'
 
-variable_id = 'ch4'
-#experiment_id = 'ch4pert'
-experiment_id = 'h2pert'
+#variable_id = 'ch4'
+experiment_id = 'ch4pert'
+#experiment_id = 'h2pert'
 
 model_list = ['OsloCTM3v1-2',
               'EC-Earth3-AerChem',
@@ -66,6 +71,22 @@ for model_id in model_list:
     print(budget_annual_diff)
     budget_annual_diff = budget_annual_diff.dropna(how='all')
     budget_annual_diff.index = budget_annual_diff.index - budget_annual_diff.index[0]
+
+
+    if model_id == 'GFDL-ESM4-c1':
+        budget_annual_diff.index  = budget_annual_diff.index + 25
+    else:
+        print(budget_annual_diff)
+        budget_annual_diff.index = budget_annual_diff.index+1
+        budget_annual_diff.loc[0] = 0.0
+        if variable_id == 'h2':
+            budget_annual_diff['lifetime'].loc[0]=np.nan
+        budget_annual_diff['atmlifetime'].loc[0]=np.nan
+        print(budget_annual_diff)
+        budget_annual_diff = budget_annual_diff.sort_index()
+        
+    
+        
     print(budget_annual_diff)
         
     budget_annual_diff['surfconc'] = budget_annual_diff['surfconc']*1e9
@@ -74,4 +95,5 @@ for model_id in model_list:
         axs[c].set_title(title_dict[col])
 
 axs[0].legend()
+plt.suptitle(experiment_id +' - cntr, budget diff for: ' + variable_id,fontsize=16)
 plt.show()

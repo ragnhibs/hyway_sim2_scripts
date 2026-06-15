@@ -24,29 +24,29 @@ member_id_list =  {'OsloCTM3v1-2':'r2',
                    'UKESM1-0-LL':'r2'}
 
 
+model_list = ['OsloCTM3v1-2',
+              'NorESM2-LM-C',
+              'EC-Earth3-AerChem',
+              'EMAC-DLR',
+              'LMDZ-INCA',
+              'CESM2-v212',
+              'GFDL-ESM4-c1',
+              'UKESM1-0-LL']
+
+
 molecw_list = {'ch3oh':32.032,
                'c2h6':30.068,
                'h2':2.016 ,
                'ch4':16.042,
                'hcho':30.026,
-               'h2o':28.01,
+               'h2o':18.015,
                'co':28.01,
                'o3':48.0,
                'mhp':48.042}
     
 #molecw_list = {'ch4':16.042}
 
-model_list = [ 'UKESM1-0-LL'] #'EMAC-DLR'] #'LMDZ-INCA'] #'NorESM2-LM-C'] #'UKESM1-0-LL'] #'NorESM2-LM-C'] #'GFDL-ESM4-c1'] #'CESM2-v212'] #  'OsloCTM3v1-2']#'UKESM1-0-LL']
 
-"""
-model_list = ['EMAC-DLR',
-              'NorESM2-LM-C',
-              'LMDZ-INCA',
-              'OsloCTM3v1-2',
-              'CESM2-v212',
-              'UKESM1-0-LL',
-              'GFDL-ESM4-c1']
-"""
 
 
 for variable_id in molecw_list:

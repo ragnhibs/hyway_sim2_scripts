@@ -5,12 +5,21 @@ import matplotlib.pyplot as plt
 
 
 #Plot budget values from files in results_csv and calculate annual means.
-#This script is for hydrogen, but can easily be adjusted for other components.
+#This script is for methane, but can easily be adjusted for other components.
 #Remeber to add wetdeposition and emissions (also for the total loss in lifetime calc)
+def sum_annual_mean(dataset):
+    #These are now provided as emissions per month. Just need to sum.
+    yearmean = dataset[model_id+'_'+member_id].groupby(dataset.index.year).sum() 
+    yearmean.name = model_id
+        
+    return yearmean
+
+
 
 def calc_annual_mean(dataset):
     # Calculate number of days in each month
     days_in_month = dataset.index.days_in_month
+    days_in_month = days_in_month.where(days_in_month != 29, 28)
     print(days_in_month)
     print(dataset.index)
    
@@ -78,8 +87,7 @@ symlist = {'transient2010s':'x',
 
 
 for model_id in model_list:
-    #avg_start = avg_period_list[model_id][0]
-    #avg_end = avg_period_list[model_id][1]
+    
     member_id = member_id_list[model_id]
     for experiment_id in experiment_list:
 
@@ -127,14 +135,6 @@ for model_id in model_list:
         unit_atmprod = unit
         conv = 1.0
         ax = axs[2]
-        """
-        atmprod = pd.read_csv('results_csv/monthly_atmprod_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id'_'+project_id + '_' +experiment_id + '.csv',index_col=0)
-        atmprod.index = pd.to_datetime(atmprod.index)
-        ax.plot(atmprod[model_id],color=color_list[model_id])
-        atmprod_yearmean = calc_annual_mean(atmprod)
-        atmprod_yearmean.index = pd.to_datetime(atmprod_yearmean.index.astype(str) + '-07-01')  # Mid-year for visibility
-        ax.plot(atmprod_yearmean.index, atmprod_yearmean,symlist[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(atmprod_yearmean.mean()))
-        """
 
 
 
@@ -150,7 +150,7 @@ for model_id in model_list:
         
     
         #ax.plot(atmloss[model_id],color=color_list[model_id])
-        atmloss_yearmean = calc_annual_mean(atmloss)
+        atmloss_yearmean = sum_annual_mean(atmloss)
         atmloss_yearmean.index = pd.to_datetime(atmloss_yearmean.index.astype(str) + '-07-01')  # Mid-year for visibility
         if experiment_id == 'cntr':
             ax.plot(atmloss_yearmean.index, atmloss_yearmean,symlist[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(atmloss_yearmean.mean()))
@@ -164,17 +164,7 @@ for model_id in model_list:
         conv = 1.0
         ax = axs[4]
 
-        """
-        soilsink = pd.read_csv('results_csv/monthly_soilsink_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id'_'+project_id + '_' +experiment_id + '.csv',index_col=0)
-        soilsink.index = pd.to_datetime(soilsink.index)
-        soilsink.index = soilsink.index.map(lambda x: x.replace(day=15))
-        
     
-        ax.plot(soilsink[model_id],color=color_list[model_id])
-        soilsink_yearmean = calc_annual_mean(soilsink)
-        soilsink_yearmean.index = pd.to_datetime(soilsink_yearmean.index.astype(str) + '-07-01')  # Mid-year for visibility
-        ax.plot(soilsink_yearmean.index, soilsink_yearmean,symlist[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(soilsink_yearmean.mean()))
-        """
 
         
         #Emissions
@@ -183,27 +173,7 @@ for model_id in model_list:
         conv = 1.0
         ax = axs[6]
 
-        """
-        #Concentration driven experiment. Emission estimated as total loss minus total prod.
-        if experiment_id == 'transient2010s':
-            emis = soilsink[model_id]+atmloss[model_id]-atmprod[model_id]
-            emis = emis.to_frame()
-            ax.plot(emis[model_id],color=color_list[model_id])
-            emis_yearmean = calc_annual_mean(emis)
-            emis_yearmean.index = pd.to_datetime(emis_yearmean.index.astype(str) + '-07-01')  # Mid-year for visibility
-            ax.plot(emis_yearmean.index, emis_yearmean,'o',color=color_list[model_id],label='Est.emis '+ model_id + " ({:.1f})".format(emis_yearmean.mean()))
-
-
-        else:
-            emis = pd.read_csv('results_csv/monthly_emis_'+variable_id+'_'+table_id+'_'+model_id+'_'+member_id'_'+project_id + '_' +experiment_id + '.csv',index_col=0)
-            emis.index = pd.to_datetime(emis.index)
-            emis.index = emis.index.map(lambda x: x.replace(day=15))
-            ax.plot(emis[model_id],color=color_list[model_id])
-            emis_yearmean = calc_annual_mean(emis)
-            emis_yearmean.index = pd.to_datetime(emis_yearmean.index.astype(str) + '-07-01')  # Mid-year for visibility
-            ax.plot(emis_yearmean.index, emis_yearmean,'o',color=color_list[model_id],label=model_id + " ({:.1f})".format(emis_yearmean.mean()))
-
-        """
+        
  
         
         #Atmospheric lifetime
@@ -216,15 +186,14 @@ for model_id in model_list:
         print(burden)
         print(atmloss)
         
-        atmlifetime =  burden/atmloss
+        atmlifetime_yearmean =  burden_yearmean/atmloss_yearmean
         
-        print(atmlifetime)
+        print(atmlifetime_yearmean)
         
-        #ax.plot(atmlifetime[model_id],color=color_list[model_id])
-        atmlifetime_yearmean = calc_annual_mean(atmlifetime)
-        atmlifetime_yearmean.index = pd.to_datetime(atmlifetime_yearmean.index.astype(str) + '-07-01')  # Mid-year for visibility
         if experiment_id == 'cntr':
-            ax.plot(atmlifetime_yearmean.index, atmlifetime_yearmean,symlist[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(atmlifetime_yearmean.mean()))
+            ax.plot(atmlifetime_yearmean.index, atmlifetime_yearmean,
+                    symlist[experiment_id],color=color_list[model_id],
+                    label=model_id + " ({:.1f})".format(atmlifetime_yearmean.mean()))
     
     
         
@@ -234,22 +203,7 @@ for model_id in model_list:
         unit_totlife = unit
         conv = 1.0
         ax = axs[8]
-        """
-
-        totalloss = (soilsink[model_id]+atmloss[model_id]).to_frame()
-            
-        lifetime =  burden[model_id]/totalloss[model_id]
-        lifetime = lifetime.to_frame()
         
-        ax.plot(lifetime,color=color_list[model_id])
-            
-        lifetime_yearmean = calc_annual_mean(lifetime)
-        lifetime_yearmean.index = pd.to_datetime(lifetime_yearmean.index.astype(str) + '-07-01')  # Mid-year for visibility
-        ax.plot(lifetime_yearmean.index, lifetime_yearmean,symlist[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(lifetime_yearmean.mean()))
-
-
-
-        """
 
         #Combine all annual values and write to file:
         surfconc_yearmean.name='surfconc'

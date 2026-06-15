@@ -14,34 +14,29 @@ variable_id_list = ['oa','so4','no3fine']
 table_id = 'monthly'
 project_id = 'hyway'
 
-member_id = 'r1'
+
 
 experiment_id_list = ['cntr','h2pert','ch4pert']
 
-
-
-
-
-model_list = ['LMDZ-INCA',
-              'EC-Earth3-AerChem',
-              'EMAC-DLR',
-              'NorESM2-LM-C',
-              'LMDZ-INCA',
-              'OsloCTM3v1-2',
-              'CESM2-v212']
-
-model_list =['EMAC-DLR','NorESM2-LM-C'] #'GFDL-ESM4-c1']
-
-
-
 member_id_list =  {'OsloCTM3v1-2':'r2',
-                   'EC-Earth3-AerChem':'r1',
                    'NorESM2-LM-C':'r1',
+                   'EC-Earth3-AerChem':'r1',
                    'EMAC-DLR':'r3',
                    'LMDZ-INCA':'r1',
                    'CESM2-v212':'r1',
                    'GFDL-ESM4-c1':'r1',
                    'UKESM1-0-LL':'r2'}
+
+model_list = ['OsloCTM3v1-2',
+              'NorESM2-LM-C',
+              'EC-Earth3-AerChem',
+              'EMAC-DLR',
+              'LMDZ-INCA',
+              'CESM2-v212',
+              'GFDL-ESM4-c1',
+              'UKESM1-0-LL']
+
+
 
 
 for experiment_id in experiment_id_list:

@@ -7,17 +7,19 @@ import os
 plt.rcParams.update({'font.size': 8})
 
 def calc_annual_mean(dataset):
+    #These are now provided as emissions per month. Just need to sum.
+    
     # Calculate number of days in each month
-    days_in_month = dataset.index.days_in_month
-    days_in_month = days_in_month.where(days_in_month != 29, 28)
+    #days_in_month = dataset.index.days_in_month
+    #days_in_month = days_in_month.where(days_in_month != 29, 28)
     #print(days_in_month)
     #print(dataset.index)
     print(dataset)
     
-    dataset['weighted_values'] = dataset[model_id+'_'+member_id] * days_in_month
+    #dataset['weighted_values'] = dataset[model_id+'_'+member_id] * days_in_month
         
     #Weighted mean (365 days in each year)
-    yearmean = dataset['weighted_values'].groupby(dataset.index.year).sum()/365.0
+    yearmean = dataset[model_id+'_'+member_id].groupby(dataset.index.year).sum() #/365.0
     yearmean.name = model_id
         
     return yearmean
@@ -87,6 +89,7 @@ member_id_list =  {'OsloCTM3v1-2':'r2',
                    'UKESM1-0-LL':'r2'}
 
 
+
 #List of experiments to plot:
 #experiment_list = ['cntr','h2pert','ch4pert']
 #experiment_id = 'transient2010s'
@@ -119,28 +122,6 @@ for v,comp in enumerate(emilist):
         print(filename)
         if os.path.exists(filename):
             emis = pd.read_csv(filename,index_col=0)
-            #if model_id ==  'EC-Earth3-AerChem':
-            #    emis.index = index_save
-            #else:
-
-
-            """
-            if model_id == 'GFDL-ESM4-c1':
-                    print('Her')
-                    print(emis.index)
-                    
-                    idx = emis.index.astype(str)
-                    
-                    # 1) Split year and the rest
-                    years = idx.str.slice(0, 4).astype(int) + 2000     # add 2000 years
-                    rest  = idx.str.slice(4)                           # "-MM-DD HH:MM:SS"
-                    
-                    # 2) Reassemble with zero-padded year
-                    idx_shifted_str = years.map("{:04d}".format) + rest
-
-                    # 3) Parse with explicit format (now safely in 2000+ range)
-                    emis.index = pd.to_datetime(idx_shifted_str, format="%Y-%m-%d %H:%M:%S")
-            """
             
             emis.index = pd.to_datetime(emis.index)
             index_save = emis.index
@@ -148,12 +129,11 @@ for v,comp in enumerate(emilist):
             emis.index = emis.index.map(lambda dt: dt.replace(day=15, hour=12, minute=0, second=0))
             emis_yearmean = calc_annual_mean(emis)
             
-            #ax.plot(emis.index,emis[model_id],color=color_list[model_id])
-            
             # Convert yearly index to datetime for plotting
             emis_yearmean.index = pd.to_datetime(emis_yearmean.index.astype(str) + '-07-01')  # Mid-year for visibility
             ax.plot(emis_yearmean.index, emis_yearmean,symlist[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(emis_yearmean.mean()))
             ax.set_title(variable_id)
             ax.set_ylabel(unit)
             ax.legend()
+plt.tight_layout()
 plt.show()

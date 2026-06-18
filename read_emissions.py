@@ -42,7 +42,11 @@ table_id = 'monthly'
 project_id = 'hyway'
 
 
-experiment_id_list = ['cntr','h2pert','ch4pert']
+#experiment_id_list = ['cntr','h2pert','ch4pert']
+#experiment_id_list = ['nhh2pert','shh2pert','avih2pert','shiph2pert']
+experiment_id_list = ['cntr1850','h2antr1850']
+
+
 
 member_id_list =  {'OsloCTM3v1-2':'r2',
                    'NorESM2-LM-C':'r1',
@@ -67,7 +71,11 @@ for model_id in model_list:
     
         path = '/projects/NS11106K/HYway/modelling_repository/'+model_id+'/'+experiment_id+'/'
         member_id = member_id_list[model_id]
-    
+
+        if (experiment_id == 'cntr1850' or experiment_id == 'h2antr1850'):
+            member_id = 'r1'
+
+            
         if model_id =='CESM2-v212':
             area_path = '/nird/home/ragnhibs/hyway/tmp/'
         elif model_id == 'EC-Earth3-AerChem':

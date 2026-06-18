@@ -42,12 +42,12 @@ variable_id = 'h2'
 
 model_list = ['OsloCTM3v1-2',
               'EC-Earth3-AerChem',
-              'NorESM2-LM-C',
-              'EMAC-DLR',
-              'LMDZ-INCA',
-              'CESM2-v212',
-              'UKESM1-0-LL',
-              'GFDL-ESM4-c1']
+              'NorESM2-LM-C']
+              #'EMAC-DLR',
+              #'LMDZ-INCA',
+              #'CESM2-v212',
+              #'UKESM1-0-LL',
+              #'GFDL-ESM4-c1']
 
 color_list = {'OsloCTM3v1-2'   : '#D55E00',  # vermillion
               'CESM2-v212'     : '#0072B2',  # blue
@@ -62,33 +62,36 @@ color_list = {'OsloCTM3v1-2'   : '#D55E00',  # vermillion
 table_id = 'monthly'
 project_id = 'hyway'
 
-member_id_list =  {'OsloCTM3v1-2':'r2',
-                   'NorESM2-LM-C':'r1',
-                   'EC-Earth3-AerChem':'r1',
-                   'EMAC-DLR':'r3',
-                   'LMDZ-INCA':'r1',
-                   'CESM2-v212':'r1',
-                   'GFDL-ESM4-c1':'r1',
-                   'UKESM1-0-LL':'r2'}
+experiment_list = ['cntr','cntr1850'] #,'h2antr1850']
+
+member_id_list_cntr =  {'OsloCTM3v1-2':'r2',
+                        'NorESM2-LM-C':'r1',
+                        'EC-Earth3-AerChem':'r1',
+                        'EMAC-DLR':'r3',
+                        'LMDZ-INCA':'r1',
+                        'CESM2-v212':'r1',
+                        'GFDL-ESM4-c1':'r1',
+                        'UKESM1-0-LL':'r2'}
+
+member_id_list_preind =  {'OsloCTM3v1-2':'r1',
+                          'NorESM2-LM-C':'r1',
+                          'EC-Earth3-AerChem':'r1',
+                          'EMAC-DLR':'r3',
+                          'LMDZ-INCA':'r1',
+                          'CESM2-v212':'r1',
+                          'GFDL-ESM4-c1':'r1',
+                          'UKESM1-0-LL':'r2'}
+
+linestyle_list = {'cntr':'-',
+                  'h2antr1850':'-.',
+                  'cntr1850':':'}
 
 
 
 
 
-#List of experiments to plot:
-experiment_list = ['cntr','h2pert','ch4pert']
-experiment_list =  ['nhh2pert','shh2pert']
-#experiment_list = ['avih2pert','shiph2pert']
-#experiment_list = ['cntr1850']
-#experiment_list = ['h2antr1850']
-
-#experiment_list = ['transient2010s']
 
 
-symlist = {'transient2010s':'x',
-           'cntr':'-', #'o'
-           'h2pert':'d',
-           'ch4pert':'*'}
 
 
 
@@ -96,11 +99,14 @@ symlist = {'transient2010s':'x',
 
 
 for model_id in model_list:
-    member_id = member_id_list[model_id]
+    
     for experiment_id in experiment_list:
-        if (experiment_id == 'cntr1850' or experiment_id == 'h2antr1850'):
-            member_id = 'r1'
-
+        if experiment_id == 'cntr':
+            member_id_list = member_id_list_cntr
+        else:
+            member_id_list = member_id_list_preind
+            
+        member_id = member_id_list[model_id]
 
         #Surface concentration
         conv = 1e9
@@ -126,8 +132,8 @@ for model_id in model_list:
         #print(surfconc[model_id]*conv)
         
         #ax.plot(surfconc.index, surfconc[model_id]*conv,color=color_list[model_id])
-        if experiment_id == 'cntr':
-            ax.plot(surfconc_yearmean.index, surfconc_yearmean*conv,symlist[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(surfconc_yearmean.mean()*conv))
+        #if experiment_id == 'cntr':
+        ax.plot(surfconc_yearmean.index, surfconc_yearmean*conv,linestyle=linestyle_list[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(surfconc_yearmean.mean()*conv))
 
 
         #Burden
@@ -145,8 +151,8 @@ for model_id in model_list:
 
         # Convert yearly index to datetime for plotting
         burden_yearmean.index = pd.to_datetime(burden_yearmean.index.astype(str) + '-07-01')  # Mid-year for visibility
-        if experiment_id == 'cntr':
-            ax.plot(burden_yearmean.index, burden_yearmean,symlist[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(burden_yearmean.mean()))
+        #if experiment_id == 'cntr':
+        ax.plot(burden_yearmean.index, burden_yearmean,linestyle=linestyle_list[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(burden_yearmean.mean()))
 
 
         #Atmospheric production:
@@ -161,8 +167,8 @@ for model_id in model_list:
         #ax.plot(atmprod[model_id],color=color_list[model_id])
         atmprod_yearmean = sum_annual_mean(atmprod)
         atmprod_yearmean.index = pd.to_datetime(atmprod_yearmean.index.astype(str) + '-07-01')  # Mid-year for visibility
-        if experiment_id == 'cntr':
-            ax.plot(atmprod_yearmean.index, atmprod_yearmean,symlist[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(atmprod_yearmean.mean()))
+        #if experiment_id == 'cntr':
+        ax.plot(atmprod_yearmean.index, atmprod_yearmean,linestyle=linestyle_list[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(atmprod_yearmean.mean()))
 
 
 
@@ -181,8 +187,8 @@ for model_id in model_list:
         #ax.plot(atmloss[model_id],color=color_list[model_id])
         atmloss_yearmean = sum_annual_mean(atmloss)
         atmloss_yearmean.index = pd.to_datetime(atmloss_yearmean.index.astype(str) + '-07-01')  # Mid-year for visibility
-        if experiment_id == 'cntr':
-            ax.plot(atmloss_yearmean.index, atmloss_yearmean,symlist[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(atmloss_yearmean.mean()))
+        #if experiment_id == 'cntr':
+        ax.plot(atmloss_yearmean.index, atmloss_yearmean,linestyle=linestyle_list[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(atmloss_yearmean.mean()))
 
 
 
@@ -204,8 +210,8 @@ for model_id in model_list:
         soilsink_yearmean.index = pd.to_datetime(soilsink_yearmean.index.astype(str) + '-07-01')  # Mid-year for visibility
 
         
-        if experiment_id == 'cntr':
-            ax.plot(soilsink_yearmean.index, soilsink_yearmean,symlist[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(soilsink_yearmean.mean()))
+        #if experiment_id == 'cntr':
+        ax.plot(soilsink_yearmean.index, soilsink_yearmean,linestyle=linestyle_list[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(soilsink_yearmean.mean()))
 
 
 
@@ -234,8 +240,8 @@ for model_id in model_list:
             #ax.plot(emis[model_id],color=color_list[model_id])
             emis_yearmean = sum_annual_mean(emis)
             emis_yearmean.index = pd.to_datetime(emis_yearmean.index.astype(str) + '-07-01')  # Mid-year for visibility
-            if experiment_id == 'cntr':
-                ax.plot(emis_yearmean.index, emis_yearmean,symlist[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(emis_yearmean.mean()))
+            #if experiment_id == 'cntr':
+            ax.plot(emis_yearmean.index, emis_yearmean,linestyle=linestyle_list[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(emis_yearmean.mean()))
 
 
  
@@ -248,9 +254,9 @@ for model_id in model_list:
         
         atmlifetime_yearmean =  burden_yearmean/atmloss_yearmean
         
-        if experiment_id == 'cntr':
-            ax.plot(atmlifetime_yearmean.index, atmlifetime_yearmean,symlist[experiment_id],
-                    color=color_list[model_id],label=model_id + " ({:.1f})".format(atmlifetime_yearmean.mean()))
+        #if experiment_id == 'cntr':
+        ax.plot(atmlifetime_yearmean.index, atmlifetime_yearmean,linestyle=linestyle_list[experiment_id],
+                color=color_list[model_id],label=model_id + " ({:.1f})".format(atmlifetime_yearmean.mean()))
     
     
         #Total lifetime
@@ -272,8 +278,8 @@ for model_id in model_list:
             
         #lifetime_yearmean = calc_annual_mean(lifetime)
         #lifetime_yearmean.index = pd.to_datetime(lifetime_yearmean.index.astype(str) + '-07-01')  # Mid-year for visibility
-        if experiment_id == 'cntr':
-            ax.plot(lifetime_yearmean.index, lifetime_yearmean,symlist[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(lifetime_yearmean.mean()))
+        #if experiment_id == 'cntr':
+        ax.plot(lifetime_yearmean.index, lifetime_yearmean,linestyle=linestyle_list[experiment_id],color=color_list[model_id],label=model_id + " ({:.1f})".format(lifetime_yearmean.mean()))
 
 
 
@@ -314,30 +320,30 @@ emis_lim = {'h2':[0,70]}
 
 #The ylim must be adjusted for each variables
 axs[0].set_ylim(surf_lim[variable_id])
-axs[0].legend(loc='lower right')
+axs[0].legend() #loc='lower right')
 axs[0].set_title('Surfconc [ '+unit_surf + ']')
 
 axs[1].set_ylim(burden_lim[variable_id])
-axs[1].legend(loc='lower right')
+axs[1].legend() #loc='lower right')
 axs[1].set_title('Burden [ '+unit_burden + ']')
 
 axs[2].set_ylim(atm_prod_lim[variable_id])
-axs[2].legend(loc='lower right')
+axs[2].legend() #loc='lower right')
 axs[2].set_title('Atm.prod ['+unit_atmprod + ']')
 
 axs[3].set_ylim(atm_loss_lim[variable_id])
-axs[3].legend(loc='lower right')
+axs[3].legend()#loc='lower right')
 axs[3].set_title('Atm.loss ['+unit_atmloss + ']')
 
 axs[4].set_ylim(soil_sink_lim[variable_id])
-axs[4].legend(loc='lower right')
+axs[4].legend()#loc='lower right')
 axs[4].set_title('Soil sink ['+unit_soilsink + ']')
 
 unit_scav = unit_soilsink
 axs[5].set_title('Scavenging ['+unit_scav + ']')
 
 axs[6].set_ylim(emis_lim[variable_id])
-axs[6].legend(loc='lower right')
+axs[6].legend()#loc='lower right')
 axs[6].set_title('Emissions ['+unit_emis + ']')
         
 axs[7].set_ylim(atm_lifetime_lim[variable_id])
